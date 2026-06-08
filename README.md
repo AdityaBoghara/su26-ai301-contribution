@@ -1,10 +1,10 @@
-# Contribution 1: Deleting a string redirects to main component page instead of the next string
+# Contribution 1: general.hideFunSettings does not deactivate fun features
 
 **Contribution Number:** 1
 
 **Student:** Aditya Boghara
 
-**Issue:** https://github.com/WeblateOrg/weblate/issues/6812 
+**Issue:** https://github.com/jxn-30/better-moodle/issues/876
 
 **Status:** Phase I Complete
 
@@ -12,9 +12,9 @@
 
 ## Why I Chose This Issue
 
-I chose this issue because it is a clear user experience problem with a specific and understandable fix. When users are translating strings in Weblate, deleting a string should not interrupt their workflow by sending them back to the main component language page. The expected behavior is to continue the translation flow by redirecting the user to the next string or unit. This makes the issue practical, user focused, and easier to validate once fixed.
+I chose this issue because it is a clear user experience problem with a specific and understandable fix. Better-Moodle has a setting called `general.hideFunSettings`, which is meant to hide fun-related settings from users who want to use Moodle mainly as a productivity tool. However, the issue is that hiding those settings does not actually deactivate the fun features themselves. As a result, users may still see features like the Christmas countdown even though they expected the fun settings to be hidden or disabled.
 
-This issue also matches my skills and learning goals. Weblate is a Python based web application, and the fix will likely involve understanding Django view logic, redirect behavior, and tests. I am comfortable working with Python, and this issue gives me a good opportunity to learn how a large open source web application handles user actions and navigation flow. The scope also feels manageable because the issue is focused on one behavior rather than a broad feature or large refactor.
+This issue also matches my skills and learning goals. Better-Moodle appears to use TypeScript, and the fix will likely involve understanding how settings are stored, checked, and applied across the extension. I am interested in working on this because it gives me a chance to improve my understanding of TypeScript logic, browser extension behavior, and user setting management. The scope feels manageable because the issue focuses on one setting behavior rather than a large feature or full redesign.
 
 ---
 
@@ -22,19 +22,19 @@ This issue also matches my skills and learning goals. Weblate is a Python based 
 
 ### Problem Description
 
-When a user deletes a string while translating in Weblate, they are redirected to the main component language page instead of being taken to the next string or unit. This interrupts the translation workflow.
+When `general.hideFunSettings` is enabled, Better-Moodle hides fun-related settings from the settings page, but it does not deactivate the actual fun features. This means users may still experience fun features even though they are trying to hide or avoid them.
 
 ### Expected Behavior
 
-After deleting a string, the user should be redirected to the next available string or unit so they can continue translating without manually navigating back to where they were.
+When `general.hideFunSettings` is enabled, fun features should either be disabled automatically or only disabled fun settings should be hidden. Users should not be forced to interact with fun features if they choose to hide those settings.
 
 ### Current Behavior
 
-After deleting a string, Weblate redirects the user to the main component language page. This forces the user to manually find their place again if they want to continue translating.
+Currently, `general.hideFunSettings` only hides the fun settings from the user interface. It does not stop fun features like `navbarMarquee.christmasCountdown.enabled` from being active, so users may still see unwanted fun features in Moodle.
 
 ### Affected Components
 
-The affected components are likely the delete string or delete unit view, the redirect logic used after deleting a string, and the existing navigation logic that determines the next string after saving or translating. The fix may also involve updating or adding tests to verify that deleting a string redirects the user to the next unit when appropriate.
+The affected components are likely the general settings logic, the fun settings configuration, and the feature activation or rendering logic for fun features such as the Christmas countdown or xEyes. The fix may also involve updating how `general.hideFunSettings` interacts with individual fun feature settings and adding or updating tests to confirm that fun features are handled correctly when this setting is enabled.
 
 ---
 
