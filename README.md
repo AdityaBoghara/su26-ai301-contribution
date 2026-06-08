@@ -1,4 +1,4 @@
-# Contribution [#]: Deleting a string redirects to main component page instead of the next string
+# Contribution 1: Deleting a string redirects to main component page instead of the next string
 
 **Contribution Number:** 1
 
