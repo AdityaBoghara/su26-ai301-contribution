@@ -1,17 +1,17 @@
-# Contribution [#]: [Deleting a string redirects to main component page instead of the next string]
+# Contribution [#]: Deleting a string redirects to main component page instead of the next string
 
-**Contribution Number:** [1]  
-**Student:** [Aditya Boghara]  
-**Issue:** [https://github.com/WeblateOrg/weblate/issues/6812]  
-**Status:** [Phase I] [In Progress]
+**Contribution Number:** 1
+**Student:** Aditya Boghara
+**Issue:** https://github.com/WeblateOrg/weblate/issues/6812 
+**Status:** Phase I In Progress
 
 ---
 
 ## Why I Chose This Issue
 
-[I chose this issue because it is a clear user experience problem with a specific and understandable fix. When users are translating strings in Weblate, deleting a string should not interrupt their workflow by sending them back to the main component language page. The expected behavior is to continue the translation flow by redirecting the user to the next string or unit. This makes the issue practical, user focused, and easier to validate once fixed.
+I chose this issue because it is a clear user experience problem with a specific and understandable fix. When users are translating strings in Weblate, deleting a string should not interrupt their workflow by sending them back to the main component language page. The expected behavior is to continue the translation flow by redirecting the user to the next string or unit. This makes the issue practical, user focused, and easier to validate once fixed.
 
-This issue also matches my skills and learning goals. Weblate is a Python based web application, and the fix will likely involve understanding Django view logic, redirect behavior, and tests. I am comfortable working with Python, and this issue gives me a good opportunity to learn how a large open source web application handles user actions and navigation flow. The scope also feels manageable because the issue is focused on one behavior rather than a broad feature or large refactor.]
+This issue also matches my skills and learning goals. Weblate is a Python based web application, and the fix will likely involve understanding Django view logic, redirect behavior, and tests. I am comfortable working with Python, and this issue gives me a good opportunity to learn how a large open source web application handles user actions and navigation flow. The scope also feels manageable because the issue is focused on one behavior rather than a broad feature or large refactor.
 
 ---
 
@@ -19,19 +19,19 @@ This issue also matches my skills and learning goals. Weblate is a Python based 
 
 ### Problem Description
 
-[When a user deletes a string while translating in Weblate, they are redirected to the main component language page instead of being taken to the next string or unit. This interrupts the translation workflow.]
+When a user deletes a string while translating in Weblate, they are redirected to the main component language page instead of being taken to the next string or unit. This interrupts the translation workflow.
 
 ### Expected Behavior
 
-[After deleting a string, the user should be redirected to the next available string or unit so they can continue translating without manually navigating back to where they were.]
+After deleting a string, the user should be redirected to the next available string or unit so they can continue translating without manually navigating back to where they were.
 
 ### Current Behavior
 
-[After deleting a string, Weblate redirects the user to the main component language page. This forces the user to manually find their place again if they want to continue translating.]
+After deleting a string, Weblate redirects the user to the main component language page. This forces the user to manually find their place again if they want to continue translating.
 
 ### Affected Components
 
-[The affected components are likely the delete string or delete unit view, the redirect logic used after deleting a string, and the existing navigation logic that determines the next string after saving or translating. The fix may also involve updating or adding tests to verify that deleting a string redirects the user to the next unit when appropriate.]
+The affected components are likely the delete string or delete unit view, the redirect logic used after deleting a string, and the existing navigation logic that determines the next string after saving or translating. The fix may also involve updating or adding tests to verify that deleting a string redirects the user to the next unit when appropriate.
 
 ---
 
