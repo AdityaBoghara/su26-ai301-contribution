@@ -6,7 +6,7 @@
 
 **Issue:** https://github.com/WeblateOrg/weblate/issues/6812 
 
-**Status:** Phase I In Progress
+**Status:** Phase I Complete
 
 ---
 
