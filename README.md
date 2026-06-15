@@ -142,7 +142,7 @@ if (enabled.value) {
 Working branch in my fork:
 
 ```text
-
+https://github.com/AdityaBoghara/better-moodle/tree/fix-hide-fun-settings
 ```
 
 ---
