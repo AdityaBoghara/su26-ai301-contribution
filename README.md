@@ -38,19 +38,6 @@ The affected components are likely the general settings logic, the fun settings 
 
 ---
 
-````md
-# Contribution 1: general.hideFunSettings does not deactivate fun features
-
-**Contribution Number:** 1
-
-**Student:** Aditya Boghara
-
-**Issue:** https://github.com/jxn-30/better-moodle/issues/876
-
-**Status:** Phase II Complete
-
----
-
 ## Reproduction Process
 
 ### Environment Setup
@@ -155,13 +142,7 @@ if (enabled.value) {
 Working branch in my fork:
 
 ```text
-[Add your direct branch link here]
-```
 
-Example format:
-
-```text
-https://github.com/AdityaBoghara/better-moodle/tree/fix-hide-fun-settings
 ```
 
 ---
