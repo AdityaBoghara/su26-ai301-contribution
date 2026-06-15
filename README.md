@@ -6,7 +6,7 @@
 
 **Issue:** https://github.com/jxn-30/better-moodle/issues/876
 
-**Status:** Phase I Complete
+**Status:** Phase II Complete
 
 ---
 
@@ -42,19 +42,16 @@ The affected components are likely the general settings logic, the fun settings 
 
 ### Environment Setup
 
-[Notes on setting up your local development environment - challenges you faced, how you solved them]
+I set up the Better-Moodle project locally by following the repository’s contribution instructions. I cloned the repository, enabled Yarn through Corepack, used the Node version specified in `.nvmrc`, and installed the project dependencies with Yarn.
 
-### Steps to Reproduce
+Commands used:
 
-1. [Step 1]
-2. [Step 2]
-3. [Observed result]
-
-### Reproduction Evidence
-
-- **Commit showing reproduction:** [Link to commit in your fork]
-- **Screenshots/logs:** [If applicable]
-- **My findings:** [What you discovered during reproduction]
+```bash
+git clone https://github.com/jxn-30/better-moodle.git
+cd better-moodle
+corepack enable
+nvm use
+yarn install
 
 ---
 
