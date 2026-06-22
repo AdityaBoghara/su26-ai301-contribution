@@ -230,7 +230,7 @@ Expected manual testing flow:
 
 Implemented the core change by moving the “fun” classification into `Feature.register(...)` metadata. Added feature-level tag accessors and updated the loader so fun-tagged features can be skipped before instantiation. Tagged the known fun features and updated `hideFunSettings` to require a reload.
 
-### Week [Y] Progress
+### Week [4] Progress
 
 Follow-up work should focus on runtime verification in Moodle and adding automated coverage for feature metadata and loader behavior.
 
