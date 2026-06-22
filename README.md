@@ -6,7 +6,7 @@
 
 **Issue:** https://github.com/jxn-30/better-moodle/issues/876
 
-**Status:** Phase II Complete
+**Status:** Phase III Complete
 
 ---
 
@@ -147,176 +147,110 @@ https://github.com/AdityaBoghara/better-moodle/tree/fix-hide-fun-settings
 
 ---
 
-## Solution Approach
+# Solution Approach
 
-### Implementation Plan
+## Analysis
 
-I used an UMPIRE-style approach to understand, reproduce, plan, implement, review, and evaluate the fix.
+The issue is that `hideFunSettings` was only hiding fun-related settings in the UI after features had already been loaded. This meant that “fun” was not part of the core feature model, and fun features could still be instantiated even when the setting was enabled.
 
-#### U — Understand
+The root problem was that the source of truth lived at the setting/UI level instead of the feature-loading level.
 
-I first reviewed the GitHub issue and identified the main problem: `general.hideFunSettings` hides fun settings from the settings page, but it does not deactivate the actual fun features. The issue specifically mentions `navbarMarquee.christmasCountdown.enabled` as an example of a fun feature that is enabled by default.
+## Proposed Solution
 
-The root problem was that hiding the setting did not affect runtime behavior.
+Move the “fun” classification into feature metadata. Allow features to declare tags directly through `Feature.register(...)`, expose a way to read those tags, and use that metadata in the loader to skip fun-tagged features when `settings.general.hideFunSettings` is enabled.
 
-#### M — Map
+## Implementation Plan
 
-I mapped the related code areas:
+Using the adapted **UMPIRE framework**:
 
-* `src/features/general/index.ts`
+### Understand
 
-  * Contains the `hideFunSettings` setting.
-  * Handles hiding fun settings in the UI by toggling a CSS class.
+The goal is to prevent fun features from loading when `hideFunSettings` is enabled, instead of only hiding their settings in the modal.
 
-* `src/features/navbarMarquee/christmasCountdown.tsx`
+### Match
 
-  * Contains the Christmas countdown feature.
-  * Defines the countdown setting as a fun setting using `.addTag('fun')`.
-  * Adds the countdown to the navbar when `enabled.value` is true.
+The codebase already has a clean core structure with `Feature`, `FeatureGroup`, and `imports.ts` controlling registration and loading. There was already a concept of “fun” at the setting-tag level, so the new work follows that pattern while moving it to the feature level.
 
-This helped me identify that the countdown feature was only checking its own enabled setting and not checking the global `hideFunSettings` value.
+### Plan
 
-#### P — Plan
+1. Modify `src/_lib/Feature.tsx` so `Feature.register(...)` accepts tags.
+2. Add feature-level tag accessors such as `tags` and `hasTag(...)`.
+3. Update `src/_lib/imports.ts` so the loader checks `settings.general.hideFunSettings` before instantiating tagged features.
+4. Tag known fun features such as `googlyEyes` and `christmasCountdown`.
+5. Update `src/features/general/index.ts` so `hideFunSettings` is reload-based, since skipped features require a fresh load to return.
 
-My plan was to reuse the existing `hideFunSettings` setting rather than creating a duplicate setting. To do this, I planned to:
+### Implement
 
-1. Export the existing `hideFunSettings` setting from the general feature group.
-2. Import that setting into the Christmas countdown feature.
-3. Update the countdown activation condition so it only runs when:
+Implemented locally in the core feature model, loader path, and tagged feature files.
 
-   * the Christmas countdown is enabled, and
-   * fun settings are not hidden.
-4. Add an input listener so the countdown updates immediately when `hideFunSettings` changes.
-5. Run linting, formatting, and build commands to verify the change.
+### Review
 
-#### I — Implement
+Self-review checklist:
 
-I updated the general settings file by exporting the existing setting:
+- [x] Follows the project’s feature/group architecture
+- [x] Keeps feature metadata in the core model
+- [x] Avoids coupling the loader directly to `general/index.ts`
+- [x] Preserves existing settings behavior where possible
+- [x] Makes reload behavior explicit for `hideFunSettings`
 
-```ts
-export const hideFunSettings = new BooleanSetting('hideFunSettings', true).onInput(
-    updateFunSettingsHiddenState
-);
-```
+### Evaluate
 
-Then I imported it into the Christmas countdown feature:
-
-```ts
-import { hideFunSettings } from '../general';
-```
-
-I updated the countdown condition from:
-
-```ts
-if (enabled.value) {
-```
-
-to:
-
-```ts
-if (enabled.value && !hideFunSettings.value) {
-```
-
-I also added an input listener:
-
-```ts
-hideFunSettings.onInput(reload);
-```
-
-This ensures that when the user changes `general.hideFunSettings`, the Christmas countdown reloads and respects the updated setting.
-
-#### R — Review
-
-After implementing the fix, I reviewed the change to make sure I was not creating a duplicate setting object. I reused the existing `hideFunSettings` setting by exporting and importing it.
-
-I also checked that the fix was limited to the issue scope. The change updates the Christmas countdown behavior, which is the specific enabled-by-default fun feature mentioned in the issue.
-
-I ran formatting and linting commands:
-
-```bash
-yarn run lint:fix
-yarn run prettier:write
-```
-
-I resolved import sorting warnings in the changed file.
-
-#### E — Evaluate
-
-The expected behavior after the fix is:
-
-* If `navbarMarquee.christmasCountdown.enabled` is true and `general.hideFunSettings` is false, the Christmas countdown can appear.
-* If `general.hideFunSettings` is true, the Christmas countdown should not appear even if the countdown setting itself is enabled.
-* If the user changes `hideFunSettings`, the countdown reloads immediately because of the new input listener.
-
-This solution improves the user experience by making the Christmas countdown respect the global fun settings preference instead of only hiding the setting from the UI.
-
----
-
-## Solution Approach
-
-### Analysis
-
-[Your analysis of the root cause - what's causing the issue?]
-
-### Proposed Solution
-
-[High-level description of your fix approach]
-
-### Implementation Plan
-
-Using UMPIRE framework (adapted):
-
-**Understand:** [Restate the problem]
-
-**Match:** [What similar patterns/solutions exist in the codebase?]
-
-**Plan:** [Step-by-step implementation plan]
-1. [Modify file X to do Y]
-2. [Add function Z]
-3. [Update tests]
-
-**Implement:** [Link to your branch/commits as you work]
-
-**Review:** [Self-review checklist - does it follow the project's contribution guidelines?]
-
-**Evaluate:** [How will you verify it works?]
-
----
+Verify the solution by building and type-checking the project, then confirming in Moodle that fun features are hidden by default and reappear only after disabling **Hide fun settings** and reloading.
 
 ## Testing Strategy
 
 ### Unit Tests
 
-- [ ] Test case 1: [Description]
-- [ ] Test case 2: [Description]
-- [ ] Test case 3: [Description]
+1. **Feature registration accepts tags and stores them correctly**
+2. **`hasTag("fun")` returns `true` only for tagged features**
+3. **The loader skips fun-tagged features when `settings.general.hideFunSettings` is `true`**
 
 ### Integration Tests
 
-- [ ] Integration scenario 1
-- [ ] Integration scenario 2
+1. **Tagged features are not instantiated when fun settings are hidden**
+2. **Tagged features appear again after disabling Hide fun settings and reloading**
 
 ### Manual Testing
 
-[What you tested manually and results]
+Manual runtime verification is still incomplete. We were able to implement the fix and type-check it locally, but we were not able to fully run and validate the userscript end-to-end in the target Moodle environment.
 
----
+Expected manual testing flow:
+
+1. Install the built userscript.
+2. Log in to Moodle with a normal account.
+3. Confirm that **Hide fun settings** is visible under General Settings.
+4. Confirm that fun features are hidden by default.
+5. Disable **Hide fun settings** and save the changes.
+6. Reload the page.
+7. Confirm that the fun features reappear.
 
 ## Implementation Notes
 
-### Week [X] Progress
+### Week [3] Progress
 
-[What you built this week, challenges faced, decisions made]
+Implemented the core change by moving the “fun” classification into `Feature.register(...)` metadata. Added feature-level tag accessors and updated the loader so fun-tagged features can be skipped before instantiation. Tagged the known fun features and updated `hideFunSettings` to require a reload.
 
 ### Week [Y] Progress
 
-[Continue documenting as you work]
+Follow-up work should focus on runtime verification in Moodle and adding automated coverage for feature metadata and loader behavior.
 
-### Code Changes
+## Code Changes
 
-- **Files modified:** [List]
-- **Key commits:** [Links to important commits]
-- **Approach decisions:** [Why you chose certain approaches]
+### Files Modified
+
+- `src/_lib/Feature.tsx`
+- `src/_lib/imports.ts`
+- `src/features/general/index.ts`
+- `src/features/general/googlyEyes.tsx`
+- `src/features/navbarMarquee/christmasCountdown.tsx`
+
+### Key Commits
+
+https://github.com/jxn-30/better-moodle/commit/c95aca9e1996b3969c41e0caa3b854d812f225cd
+
+### Approach Decisions
+
+Feature-level metadata was selected because it makes the feature itself the source of truth and allows the loader to decide early whether a feature should exist at all. This is cleaner than loading the feature and only hiding its settings in the UI.
 
 ---
 
