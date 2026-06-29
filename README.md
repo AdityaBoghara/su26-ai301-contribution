@@ -256,15 +256,15 @@ Feature-level metadata was selected because it makes the feature itself the sour
 
 ## Pull Request
 
-**PR Link:** [GitHub PR URL when submitted]
+**PR Link:** https://github.com/jxn-30/better-moodle/pull/1141
 
-**PR Description:** [Draft or final PR description - much of the content above can be adapted]
+**PR Description:** Fixed a bug where general.hideFunSettings hid fun-tagged settings in the UI but did not fully respect that state for fun-related features. Verified the fix by running formatting, linting, source tests, a build, and userscript tests for uzl and Cau.
 
 **Maintainer Feedback:**
-- [Date]: [Summary of feedback received]
-- [Date]: [How you addressed it]
+- [June 25th, 2026]: Reviewer was assigned
+- [June 28th, 2026]: Waiting for the additional reviewer comments
 
-**Status:** [Awaiting review / Iterating / Approved / Merged]
+**Status:** Awaiting review
 
 ---
 
@@ -272,20 +272,20 @@ Feature-level metadata was selected because it makes the feature itself the sour
 
 ### Technical Skills Gained
 
-[What you learned technically]
+Learned how Better-Moodle marks fun-only settings using addTag('fun'), how those tags become data-tags in the settings UI, and how hideFunSettings is applied through CSS plus feature-setting logic.
 
 ### Challenges Overcome
 
-[What was hard and how you solved it]
+The hardest part was tracing how a setting-level tag affected actual feature behavior. I solved it by following the path from the feature settings, to the shared Setting class, to the rendered DOM and related hide/show behavior. I also had to work around the local Node/Yarn setup by using the repo’s required Node version before running checks.
 
 ### What I'd Do Differently Next Time
 
-[Reflection on your process]
+Next time I would check the repo’s expected Node version and CI-style test commands earlier, since that would have saved time when running Yarn and the userscript tests locally.
 
 ---
 
 ## Resources Used
 
-- [Link to helpful documentation]
-- [Tutorial or Stack Overflow post that helped]
-- [GitHub issues or discussions that helped]
+- better-moodle/CONTRIBUTING.md
+- [Tutorial or Stack Overflow post that helped](https://www.conventionalcommits.org/en/v1.0.0/)
+- [GitHub Actions test workflow](better-moodle/.github/workflows/test.yml)
